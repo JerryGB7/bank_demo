@@ -8,6 +8,7 @@ class ATMBase(BaseModel):
     status: ATMStatus = ATMStatus.OPERATIONAL
     cash_level: int = Field(gt=0, le=100)
     branch_id: int
+    technician_id: int
 
 class ATMCreate(ATMBase):
     """Shape of the request body for POST /atms"""

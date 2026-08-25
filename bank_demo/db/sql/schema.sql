@@ -11,20 +11,23 @@ CREATE TABLE branches(
     supervisor_id INTEGER NOT NULL
 );
 
+CREATE TABLE technicians(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(20) NOT NULL,
+    branch_id INTEGER NOT NULL REFERENCES branches(id)
+);
+
+
 CREATE TABLE atms(
     id SERIAL PRIMARY KEY,
     serial_number INTEGER NOT NULL UNIQUE,
     model VARCHAR(50) NOT NULL,
     status atm_status NOT NULL DEFAULT 'Operational',
     cash_level NUMERIC(5,2) NOT NULL CHECK(cash_level BETWEEN 0 AND 100),
-    branch_id INTEGER NOT NULL REFERENCES branches(id)
+    branch_id INTEGER NOT NULL REFERENCES branches(id),
+    technician_id INTEGER NOT NULL REFERENCES technicians(id)
 );
 
-CREATE TABLE technicians(
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(20) NOT NULL,
-    branch_id INTEGER NOT NULL REFERENCES branches(id)
-);
 
 CREATE TABLE service_calls(
     id SERIAL PRIMARY KEY,

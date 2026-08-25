@@ -11,7 +11,9 @@ from .enums import ATMStatus
 
 if TYPE_CHECKING:
     from .branch import Branch
+    from .technician import Technician
     from .service_call import ServiceCall
+
 
 class ATM(Base):
     __tablename__ = "atms"
@@ -28,9 +30,12 @@ class ATM(Base):
         default=ATMStatus.OPERATIONAL)
     cash_level: Mapped[int] = mapped_column(Integer)
     branch_id: Mapped[int] = mapped_column(Integer, ForeignKey("branches.id"))
+    technician_id: Mapped[int] = mapped_column(Integer, ForeignKey("technicians.id"))
 
     branch: Mapped["Branch"] = relationship(back_populates="atms")
+    technician: Mapped["Technician"] = relationship(back_populates="atms")
     service_call: Mapped["ServiceCall"] = relationship(back_populates="atms")
+
 
     def needs_maintenance(self) -> bool:
         return self.status == ATMStatus.MAINTENANCE

@@ -10,6 +10,7 @@ from .base import Base
 if TYPE_CHECKING:
       from .branch import Branch
       from .service_call import ServiceCall
+      from .atm import ATM
 
 class Technician(Base):
     __tablename__ = "technicians"
@@ -20,7 +21,9 @@ class Technician(Base):
 
      # Each technician belongs to one branch.
     branches: Mapped["Branch"] = relationship(back_populates="technicians")
+    atms: Mapped[list["ATM"]] = relationship(back_populates="technician")  
     service_calls: Mapped[list["ServiceCall"]] = relationship(back_populates="technicians")
+
 
     def __repr__(self) -> str:
             return (f"Technician attributes: {self.id}{self.name}")
