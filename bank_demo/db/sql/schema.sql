@@ -23,7 +23,7 @@ CREATE TABLE atms(
     serial_number INTEGER NOT NULL UNIQUE,
     model VARCHAR(50) NOT NULL,
     status atm_status NOT NULL DEFAULT 'Operational',
-    cash_level NUMERIC(5,2) NOT NULL CHECK(cash_level BETWEEN 0 AND 100),
+    cash_level INTEGER NOT NULL,
     branch_id INTEGER NOT NULL REFERENCES branches(id),
     technician_id INTEGER NOT NULL REFERENCES technicians(id)
 );
