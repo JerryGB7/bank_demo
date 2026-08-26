@@ -48,13 +48,13 @@ async def get_atm(atm_id: int, db: AsyncSession = Depends(get_db), _: User = Dep
 async def discrepency(db: AsyncSession = Depends(get_db)):
     statement = (
         select(
-            ATM.id,
-            ATM.branch_id.label("atm_branch"),
-            ATM.technician_id.label("atm_technician"),
+            ATM.id.label("ATM_id"),
+            ATM.branch_id.label("ATM_branch_id"),
+            ATM.technician_id.label("ATM_technician_id"),
             Technician.id.label("technician_id"),
             Technician.branch_id.label("technician_branch_id"),
         )
-        .join(Technician, Technician.id == ATM.technician_id)
+        .join(Technician, Technician.id == ATM.technician_id).where(Technician.branch_id != ATM.branch_id)
     )
 
     result = await db.execute(statement)
