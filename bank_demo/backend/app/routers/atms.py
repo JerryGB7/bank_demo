@@ -4,17 +4,18 @@ from sqlalchemy import select
 
 from app.schemas.atm import ATMRead, ATMCreate, DiscrepancyRead
 from app.dependencies import get_db, get_current_user, require_role
-from app.models import ATM, User, Technician_RBAC, Technician, Branch
+from app.models import ATM, User, Technician_RBAC, Technician
 from app.models.enums import ATMStatus
 
 router = APIRouter(prefix="/atms", tags=["atms"])
 
+#===============================================================
 @router.get("", response_model = list[ATMRead])
 async def list_atms(db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)):
     # need a way to interact with the db
     # we are dependent on the session object 
     # create our statement for the db
-    statement = select(ATM).where(ATM.status != ATMStatus.MAINTENANCE)
+    statement = select(ATM).where(ATM.status != ATMStatus.OFFLINE)
 
 
     result = await db.execute(statement)
@@ -30,25 +31,6 @@ async def active_atms_with_low_cash(low_cash_threshold: int = 20, db: AsyncSessi
     result = await db.execute(statement)
     return list(result.scalars().all())
 
-# Co-Location Discrepancy: How many ATMs are assigned to field technicians who are NOT co-located at the same physical branch?
-@router.get("/discrepancy", response_model = list[DiscrepancyRead])
-async def co_location_discrepancy(db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)):
-    
-    # Compare the branch IDs from ATM and Technician for each assigned ATM.
-    statement = (
-        select(
-            ATM.id.label("atm_id"),
-            ATM.branch_id.label("atm_branch_id"),
-            ATM.technician_id.label("atm_technician_id"),  
-            Technician.branch_id.label("technician_branch_id")
-        )
-        .join(Technician, Technician.id == ATM.technician_id)
-        .where(ATM.branch_id != Technician.branch_id)
-    )
-
-    result = await db.execute(statement)
-    return [dict(row) for row in result.mappings().all()]
-
 
 # get a specific atm by its id
 @router.get("/atm_id", response_model=ATMRead)
@@ -62,6 +44,17 @@ async def get_atm(atm_id: int, db: AsyncSession = Depends(get_db), _: User = Dep
         )
     return atm
 
+@router.get("/discrepency", response_model = str)
+async def discrepency(db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)):
+    atm_id = select(ATM.id, ATM.technician_id, ATM.branch_id, Technician.id, Technician.branch_id
+                ).where(ATM.technician_id == Technician.id
+                ).where(ATM.branch_id == Technician.branch_id)
+    # TODO join the atm ids to identify which service calls are assigned to the atms
+
+
+    return (f"{atm_id} has a discrepency")
+
+#================================================================================================
 
 # Post requests are used for creating new resources or altering state
 @router.post("", response_model=ATMRead, status_code=status.HTTP_201_CREATED)
