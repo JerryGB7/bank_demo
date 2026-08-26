@@ -1,9 +1,11 @@
 import { Container, Typography, Box } from "@mui/material"
 import AppHeader from "./components/layout/AppHeader"
 import ATMList from "./components/atms/ATMList"
+import TechniciansList from "./components/technicians/TechnicianList"
 import { mockATMs } from "./mockData/atms"
 import ServiceCallList from "./components/servicecalls/ServiceCallList"
 import { mockServiceCalls } from "./mockData/discrepancies"
+import { mockTechnicians } from "./mockData/technicians"
 
 const atmsWithDiscrepancies = mockATMs.filter((atm) =>
   mockServiceCalls.some((discrepancy) => discrepancy.atmId === atm.id)
@@ -20,6 +22,11 @@ function App(){
         <Box sx={{mb:4}}>
           <h2 color="primary">All ATMS</h2>
           <ATMList atms={mockATMs}/>
+        </Box>
+        <Box sx={{mb:4}}>
+          
+          <h2 color="primary">All Technicians</h2>
+          <TechniciansList technicians={mockTechnicians}/>
         </Box>
         <Box sx={{mb:4}}>
           ATMS in need of maintenance
