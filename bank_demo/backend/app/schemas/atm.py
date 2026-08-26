@@ -22,6 +22,6 @@ class DiscrepancyRead(BaseModel):
     ATM_id: int
     ATM_branch_id: int
     ATM_technician_id: int
+    technician_id: int
     technician_branch_id: int
-
     model_config = ConfigDict(from_attributes=True)

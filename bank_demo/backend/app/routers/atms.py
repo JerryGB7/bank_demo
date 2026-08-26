@@ -44,15 +44,21 @@ async def get_atm(atm_id: int, db: AsyncSession = Depends(get_db), _: User = Dep
         )
     return atm
 
-@router.get("/discrepency", response_model = str)
-async def discrepency(db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)):
-    atm_id = select(ATM.id, ATM.technician_id, ATM.branch_id, Technician.id, Technician.branch_id
-                ).where(ATM.technician_id == Technician.id
-                ).where(ATM.branch_id == Technician.branch_id)
-    # TODO join the atm ids to identify which service calls are assigned to the atms
+@router.get("/discrepency", response_model=list[DiscrepancyRead])
+async def discrepency(db: AsyncSession = Depends(get_db)):
+    statement = (
+        select(
+            ATM.id,
+            ATM.branch_id.label("atm_branch"),
+            ATM.technician_id.label("atm_technician"),
+            Technician.id.label("technician_id"),
+            Technician.branch_id.label("technician_branch_id"),
+        )
+        .join(Technician, Technician.id == ATM.technician_id)
+    )
 
-
-    return (f"{atm_id} has a discrepency")
+    result = await db.execute(statement)
+    return [dict(row) for row in result.mappings().all()]
 
 #================================================================================================
 
