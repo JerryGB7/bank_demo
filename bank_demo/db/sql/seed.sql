@@ -23,7 +23,7 @@ INSERT INTO atms(id, serial_number, model, status, cash_level, branch_id, techni
     (21, 22222, 'wellsatm', 'Operational', 50, 2, 21),
     (22, 22223, 'wellsatm', 'Operational', 15, 2, 21),
     (31, 3331, 'americaatm', 'Maintenance',100, 3, 31),
-    (32, 3332, 'americaatm', 'Maintenance', 0, 3, 31),
+    (32, 3332, 'americaatm', 'Offline', 0, 3, 31),
     (41, 4441, 'eastatm', 'Operational', 19, 4, 41); 
 
 
