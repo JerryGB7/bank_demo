@@ -1,23 +1,23 @@
 import {Card, CardContent, Typography, Chip, Stack} from '@mui/material'
 
 
-function ServiceCallCard({discrepancy}){
+function ServiceCallCard({serviceCall}){
 
-    const isCritical = discrepancy.priority == 'Critical'
-    const isMedium = discrepancy.priority == 'Medium'
+    const isCritical = serviceCall.priority == 'Critical'
+    const isMedium = serviceCall.priority == 'Medium'
 
     return(
         <Card variant='outlined' sx={{minWidth: 240}}>
             <CardContent>
                 <Typography variant='h6' component="div">
-                    {discrepancy.id}:  {discrepancy.title}
+                    {serviceCall.id}:  {serviceCall.title}
                 </Typography>
                 <Typography color='text.secondary' gutterBottom>
-                    ATM ID: {discrepancy.atmId}
+                    ATM ID: {serviceCall.atmId}
                 </Typography>
                 <Stack direction="row" spacing={1} alignItems="center">
-                    <Chip label={`${discrepancy.priority}`} color={isCritical ? 'error' : 'success' && isMedium ? 'warning' : 'success'}></Chip>
-                    <Chip label={`${discrepancy.scStatus}`} variant='outlined' size='medium' color="primary"/>
+                    <Chip label={`${serviceCall.priority}`} color={isCritical ? 'error' : 'success' && isMedium ? 'warning' : 'success'}></Chip>
+                    <Chip label={`${serviceCall.scStatus}`} variant='outlined' size='medium' color="primary"/>
                 </Stack>
             </CardContent>
         </Card>

@@ -1,12 +1,12 @@
 import {Grid} from '@mui/material'
 import ServiceCallCard from './ServiceCallCard'
 
-function ServiceCallList({discrepancies}){
+function ServiceCallList({serviceCalls}){
     return (
         <Grid container spacing={2}>
-            {discrepancies.map((discrepancy)=>
-                <Grid item key={discrepancy.id}>
-                    <ServiceCallCard discrepancy={discrepancy}/>
+            {serviceCalls.map((serviceCall)=>
+                <Grid item key={serviceCall.id}>
+                    <ServiceCallCard serviceCall={serviceCall}/>
                 </Grid>)}
         </Grid>
     )

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/service_calls", tags=["service_calls"])
 # THIS SECTION IS FOR GET FUNCTIONS
 
 @router.get("", response_model = list[ServiceCallRead])
-async def list_service_calls(db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)):
+async def list_service_calls(db: AsyncSession = Depends(get_db)):
     # need a way to interact with the db
     # we are dependent on the session object 
     # create our statement for the db
@@ -26,7 +26,7 @@ async def list_service_calls(db: AsyncSession = Depends(get_db), _: User = Depen
 
 # get a specific atm by its id
 @router.get("/service_call_id", response_model=ServiceCallRead)
-async def get_service_call(service_call_id: int, db: AsyncSession = Depends(get_db), _: User = Depends(get_current_user)) -> ServiceCall:
+async def get_service_call(service_call_id: int, db: AsyncSession = Depends(get_db)) -> ServiceCall:
     service_call = await db.get(ServiceCall, service_call_id)
 
     if service_call is None:
@@ -67,17 +67,17 @@ async def create_service_call(payload: ServiceCallCreate, db: AsyncSession = Dep
 #-----------------------------------------------------------------------------------
 
 # THIS SECTION IS FOR POST FUNCTIONS
-@router.patch("/service_call_id/status", response_model=ServiceCallRead, status_code=status.HTTP_202_ACCEPTED)
+@router.patch("/{service_call_id}/status", response_model=ServiceCallRead, status_code=status.HTTP_202_ACCEPTED)
 async def update_call_status(
     service_call_id: int,
     new_status: Service_Call_Status = Query(...),
     db: AsyncSession = Depends(get_db),
     _: User = Depends(require_role(Technician_RBAC.FIELD_TECHNICIAN, Technician_RBAC.OPERATION_MANAGER)),
 ) -> ServiceCall:
-    if new_status not in (Service_Call_Status.COMPLETED, Service_Call_Status.FAILED):
+    if new_status not in (Service_Call_Status.COMPLETED, Service_Call_Status.FAILED, Service_Call_Status.IN_PROGRESS):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Status must be complete or failed",
+            detail="Status must be in progress, complete or failed",
         )
 
     service_call = await db.get(ServiceCall, service_call_id)
@@ -88,6 +88,26 @@ async def update_call_status(
         )
 
     service_call.status = new_status
+    await db.commit()
+    await db.refresh(service_call)
+    return service_call
+
+
+@router.patch("/{service_call_id}/priority", response_model=ServiceCallRead, status_code=status.HTTP_202_ACCEPTED)
+async def update_call_priority(
+    service_call_id: int,
+    new_priority: Service_Call_Priority = Query(...),
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(require_role(Technician_RBAC.OPERATION_MANAGER)),
+) -> ServiceCall:
+    service_call = await db.get(ServiceCall, service_call_id)
+    if service_call is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Service call with {service_call_id} not found",
+        )
+
+    service_call.priority = new_priority
     await db.commit()
     await db.refresh(service_call)
     return service_call

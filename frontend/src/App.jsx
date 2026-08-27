@@ -2,6 +2,7 @@ import { Container, Typography, Box } from "@mui/material"
 
 import AppHeader from "./components/layout/AppHeader"
 import ATMDataGrid from "./components/atms/ATMDataGrid.jsx"
+import ServiceCallDataGrid from "./components/servicecalls/ServiceCallDataGrid.jsx"
 
 
 import LoginForm from "./components/auth/LoginForm"
@@ -15,11 +16,20 @@ function Dashboard(){
     <>
       <AppHeader username={user?.sub} role={user?.role} onLogout={logout} />
       <Container maxWidth="lg" sx={{mt: 4}}>
-        <Typography variant="h5" component="h2" gutterBottom>
+        <Typography variant="h2" component="h2" gutterBottom>
           Bank Overview
+        </Typography>
+        <Typography variant="h5" component="h2" gutterBottom>
+          List of ATMS
         </Typography>
         <Box sx={{mb: 4}}>
           <ATMDataGrid />
+        </Box>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Current Service Calls
+        </Typography>
+        <Box sx={{mb: 4}}>
+          <ServiceCallDataGrid />
         </Box>
       </Container>
     </>
