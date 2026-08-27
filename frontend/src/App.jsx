@@ -1,47 +1,47 @@
 import { Container, Typography, Box } from "@mui/material"
+
 import AppHeader from "./components/layout/AppHeader"
-import ATMList from "./components/atms/ATMList"
-import TechniciansList from "./components/technicians/TechnicianList"
-import { mockATMs } from "./mockData/atms"
-import ServiceCallList from "./components/servicecalls/ServiceCallList"
-import { mockServiceCalls } from "./mockData/discrepancies"
-import { mockTechnicians } from "./mockData/technicians"
-import { mockBranches } from "./mockData/branches"
-import BranchList from "./components/branches/BranchList"
+import ATMDataGrid from "./components/atms/ATMDataGrid.jsx"
 
-const atmsWithDiscrepancies = mockATMs.filter((atm) =>
-  mockServiceCalls.some((discrepancy) => discrepancy.atmId === atm.id)
-)
 
-function App(){
+import LoginForm from "./components/auth/LoginForm"
+import { AuthProvider, useAuth } from "./context/AuthContext"
+
+
+function Dashboard(){
+  const {user, logout} = useAuth()
+
   return(
     <>
-      <AppHeader />
-      <Container maxWidth='lg' sx={{mt: 4}}>
+      <AppHeader username={user?.sub} role={user?.role} onLogout={logout} />
+      <Container maxWidth="lg" sx={{mt: 4}}>
         <Typography variant="h5" component="h2" gutterBottom>
-          Branch Overview
+          Bank Overview
         </Typography>
-        <Box sx={{mb:4}}>
-          <h2 color="primary">All ATMS</h2>
-          <ATMList atms={mockATMs}/>
-        </Box>
-        <Box sx={{mb:4}}>
-          <h2 color="primary">All Branches</h2>
-          <BranchList branches={mockBranches}/>
-        </Box>
-        <Box sx={{mb:4}}>
-          <h2 color="primary">All Technicians</h2>
-          <TechniciansList technicians={mockTechnicians}/>
-        </Box>
-        <Box sx={{mb:4}}>
-          ATMS in need of maintenance
-          <ATMList atms={atmsWithDiscrepancies}/>
-        </Box>
-        <Box sx={{mb:4}}>
-          Service Calls In Progress
-          <ServiceCallList discrepancies={mockServiceCalls}/>
+        <Box sx={{mb: 4}}>
+          <ATMDataGrid />
         </Box>
       </Container>
+    </>
+  )
+};
+
+//conditional layout switcher component that renders either the dashboard of the login form
+// based on the users authentication status, that is tracked in the global Auth context
+function AppContent() {
+  const {isAuthenticated} = useAuth()
+  return isAuthenticated ? <Dashboard /> : <LoginForm />
+}
+
+
+function App(){
+
+
+  return(
+    <>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </>
   )
 };

@@ -1,7 +1,9 @@
-import {AppBar, Toolbar, Typography} from '@mui/material'
+import {AppBar, Toolbar, Typography, Box, Button} from '@mui/material'
 import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing'
 
-function AppHeader() {
+
+
+function AppHeader({username, role, onLogout}) {
     return(
         <AppBar position='static'>
             <Toolbar>
@@ -9,6 +11,12 @@ function AppHeader() {
                 <Typography variant='h4' component='h1' color='secondary'>
                     Meridian Bank Demo 
                 </Typography>
+                {username && (
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
+                        <Typography variant='body2'>{username}({role})</Typography>
+                        <Button color='inherit' onClick={onLogout}>Log Out</Button>
+                    </Box>
+                )}
             </Toolbar>
         </AppBar>
     )

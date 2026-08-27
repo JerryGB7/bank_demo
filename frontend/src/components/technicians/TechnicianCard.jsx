@@ -10,7 +10,7 @@ function TechnicianCard({technician}){
                     {technician.id}:  {technician.tName}
                 </Typography>
                 <Typography color='text.secondary' gutterBottom>
-                    ATM ID: {technician.branchId}
+                    Assigned to Branch: {technician.branchId}
                 </Typography>
             </CardContent>
         </Card>
