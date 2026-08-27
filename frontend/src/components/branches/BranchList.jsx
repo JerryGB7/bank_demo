@@ -1,15 +1,15 @@
 import {Grid} from '@mui/material'
-import ATMCard from './ATMCard'
+import BranchCard from './BranchCard'
 
-function ATMList({atms}){
+function BranchList({branches}){
     return (
         <Grid container spacing={2}>
-            {atms.map((atm)=>
-                <Grid item key={atm.id}>
-                    <ATMCard atm={atm}/>
+            {branches.map((branch)=>
+                <Grid item key={branch.id}>
+                    <BranchCard branch={branch}/>
                 </Grid>)}
         </Grid>
     )
 };
 
-export default ATMList;
+export default BranchList;

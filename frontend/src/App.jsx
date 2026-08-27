@@ -6,6 +6,8 @@ import { mockATMs } from "./mockData/atms"
 import ServiceCallList from "./components/servicecalls/ServiceCallList"
 import { mockServiceCalls } from "./mockData/discrepancies"
 import { mockTechnicians } from "./mockData/technicians"
+import { mockBranches } from "./mockData/branches"
+import BranchList from "./components/branches/BranchList"
 
 const atmsWithDiscrepancies = mockATMs.filter((atm) =>
   mockServiceCalls.some((discrepancy) => discrepancy.atmId === atm.id)
@@ -24,7 +26,10 @@ function App(){
           <ATMList atms={mockATMs}/>
         </Box>
         <Box sx={{mb:4}}>
-          
+          <h2 color="primary">All Branches</h2>
+          <BranchList branches={mockBranches}/>
+        </Box>
+        <Box sx={{mb:4}}>
           <h2 color="primary">All Technicians</h2>
           <TechniciansList technicians={mockTechnicians}/>
         </Box>
