@@ -5,7 +5,7 @@ import apiClient from "../../api/client"
 
 // defining our data grid columns and map them to our backend API response data
 const columns = [
-    {field: 'id', headerName: 'ID', width: 70},
+    {field: 'id', headerName: 'ID', width: 70, type: 'number'},
     {field: 'title', headerName: 'Title', minWidth: 140, flex: 1},
     {
         field: 'priority',
@@ -143,7 +143,10 @@ function ServiceCallDataGrid(){
                 onProcessRowUpdateError={handleProcessRowUpdateError}
                 disableRowSelectionOnClick
                 pageSizeOptions={[5, 10, 25]}
-                initialState={{pagination: {paginationModel: {pageSize: 10, page: 0}}}}
+                initialState={{
+                    pagination: {paginationModel: {pageSize: 10, page: 0}},
+                    sorting: {sortModel: [{field: 'id', sort: 'asc'}]},
+                }}
                 sx={{
                     minHeight: 390,
                     border: '1px solid',

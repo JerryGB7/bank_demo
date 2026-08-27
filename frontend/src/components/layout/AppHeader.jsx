@@ -12,9 +12,9 @@ function AppHeader({username, role, onLogout}) {
                     Meridian Bank Demo 
                 </Typography>
                 {username && (
-                    <Box sx={{display: 'flex', alignItems: 'center', gap: 2}}>
-                        <Typography variant='body2'>{username}({role})</Typography>
-                        <Button color='inherit' onClick={onLogout}>Log Out</Button>
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: 5}}>
+                        <Typography variant='body2'>Welcome, {username} ({role})!</Typography>
+                        <Button color='secondary' onClick={onLogout}>Log Out</Button>
                     </Box>
                 )}
             </Toolbar>
