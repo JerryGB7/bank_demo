@@ -6,19 +6,17 @@ import apiClient from "../../api/client"
 // defining our data grid columns and map them to our backend API response data
 const columns = [
     {field: 'id', headerName: 'ID', width: 70},
-    {field: 'serial_number', headerName: 'Serial Number', width: 150},
-    {field: 'model', headerName: "Model", width: 160},
-    {field: 'status', headerName: "ATM status", width: 120},
-    {field: 'cash_level', headerName: "Cash Level", width: 120, type: "number"},
-    {field: 'branch_id', headerName: "Branch ID", width: 120, type: "number"},
-    {field: 'technician_id', headerName: "Technician ID", width: 120, type: "number"},
+    {field: 'name', headerName: 'Serial Number', width: 150},
+    {field: 'location_region', headerName: "Model", width: 160},
+    {field: 'capacity', headerName: "Capacity", width: 120, type: "number"},
+    {field: 'supervisor_id', headerName: "Supervisor ID", width: 120, type: "number"},
 ];
 
 //local state variables for tracking table rows, loading status, and network errors
 // to track the lifecycle of the async API request so the UI can render appropriately
 
-function ATMDataGrid(){
-    const [atms, setATMS] = useState([])
+function BranchDataGrid(){
+    const [branches, setBranches] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
@@ -28,17 +26,17 @@ function ATMDataGrid(){
         let isMounted = true;
 
         //pull our atm data from the backend
-        async function fetchAtms(){
+        async function fetchBranches(){
             try{
-                const response = await apiClient.get('/atms')
-                if(isMounted) setATMS(response.data)
+                const response = await apiClient.get('/branches')
+                if(isMounted) setBranches(response.data)
             } catch {
-                if (isMounted) setError('error showing atms')
+                if (isMounted) setError('error in this')
             } finally {
                 if (isMounted) setLoading(false)
             }
         }
-        fetchAtms();
+        fetchBranches();
         return () => {
             isMounted = false
         }
@@ -51,10 +49,10 @@ function ATMDataGrid(){
 
     return(
         <Box sx={{height: 400, width:'100%'}}>
-            <DataGrid rows={atms} columns={columns} getRowId={(row) => row.id}/>
+            <DataGrid rows={branches} columns={columns} getRowId={(row) => row.id}/>
         </Box>
 
     )
 }
 
-export default ATMDataGrid;
+export default BranchDataGrid;
