@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Integer, String, CheckConstraint, ForeignKey, Numeric
+from sqlalchemy import Integer, String, CheckConstraint, ForeignKey
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
