@@ -27,9 +27,13 @@ INSERT INTO atms(id, serial_number, model, status, cash_level, branch_id, techni
     (41, 4441, 'eastatm', 'Operational', 19, 4, 41); 
 
 
- INSERT INTO service_calls(id, title, priority, status, atm_id, technician_id) VALUES
+INSERT INTO service_calls(id, title, priority, status, atm_id, technician_id) VALUES
      (1, 'cash sensor not working','Critical', 'In-Progress', 31, 31),
      (2, 'cash sensor not working','Critical', 'In-Progress', 32, 31);
+
+INSERT INTO diagnostic_reports(id, service_call_id, file_url, notes) VALUES
+     (1, 1, 'demo.url', 'In-Progress'),
+     (2, 2, 'demo.url', 'In-Progress');
 
 
 SELECT setval('branches_id_seq', (SELECT MAX(id) FROM branches));
