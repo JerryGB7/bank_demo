@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from typing import TYPE_CHECKING
-
 from sqlalchemy import Integer, String, ForeignKey
 from sqlalchemy import Enum as SqlEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -36,5 +34,6 @@ class ServiceCall(Base):
 
     def __repr__(self) -> str:
         return (f"Service call attributes: {self.title}{self.atm_id}{self.technician_id}{self.priority}{self.status}")
+
 
         

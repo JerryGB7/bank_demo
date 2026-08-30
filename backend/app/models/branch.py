@@ -26,29 +26,3 @@ class Branch(Base):
     def __repr__(self) -> str:
             return (f"ID {self.id}, name: {self.name}, location: {self.location_region}, capacity: {self.capacity}")
     
-
-
-"""from typing import ClassVar
-
-class Branch:
-
-    registry: ClassVar[list["Branch"]] = []
-
-    def __init__(self, branch_id: int, name: str, location_region: str, capacity: int, manager_id: int):
-        self.id = branch_id
-        self.name = name
-        self.location_region = location_region
-        self.capacity = capacity
-        self.manager_id = manager_id 
-        Branch.registry.append(self)
-
-    def __repr__(self) -> str:
-        return (f"ID {self.id}, name: {self.name}, location: {self.location_region}, capacity: {self.capacity}, manager id: {self.manager_id}")
-
-    @classmethod
-    def find_by_id(cls, branch_id: int) -> "Branch | None":
-        for branch in cls.registry:
-            if branch.id == branch_id:
-                return branch
-
-        return None"""
