@@ -27,7 +27,7 @@ FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "http://localhost:5173")
 app = FastAPI(
     title="ATM machine tracker",
     description="ATM Mangement API for CashCow Project",
-    version="0.1.0",
+    version="0.2.0",
 )
 
 # Configure CORS so the frontend can communicate with this API.
@@ -62,3 +62,7 @@ app.include_router(service_calls.router)
 async def health_check() -> dict[str, str]:
     # Return a simple status payload so external systems can verify the app is live.
     return {"status": "ok"}
+
+@app.get("/version", tags=["health"])
+async def version() -> dict[str, str]:
+    return {"version": app.version}
