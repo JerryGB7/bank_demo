@@ -41,6 +41,8 @@ class ATM(Base):
         SqlEnum(
             ATMStatus,
             name="atm_status",
+            # Store the enum values in the database rather than the Python enum names,
+            # keeping the DB representation compatible with the enum values.
             values_callable=lambda enum_cls: [member.value for member in enum_cls],
         ),
         default=ATMStatus.OPERATIONAL,
