@@ -38,9 +38,10 @@ CREATE TABLE service_calls(
     technician_id INTEGER NOT NULL REFERENCES technicians(id)
 );
 
--- CREATE TABLE diagnostic_logs(
---     id SERIAL PRIMARY KEY,
---     file_url TEXT NOT NULL,
---     notes TEXT,
---     timestamp TIMESTAMP NOT NULL DEFAULT NOW()
--- );
+CREATE TABLE diagnostic_reports(
+    id SERIAL PRIMARY KEY,
+    service_call_id INTEGER NOT NULL REFERENCES service_calls(id),
+    file_url TEXT NOT NULL,
+    notes TEXT,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);

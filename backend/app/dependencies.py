@@ -1,18 +1,56 @@
 from collections.abc import AsyncGenerator
+# AsyncGenerator is used as the return type for the database session dependency.
+# It allows the function to yield an async SQLAlchemy session per request while
+# preserving FastAPI's dependency lifecycle and ensuring the session is closed afterward.
+
 import jwt
+# PyJWT is used to validate JWT signatures and decode the access token.
+# This is required in get_current_user() so the application can verify that the
+# incoming bearer token is authentic and not expired or otherwise invalid.
+
 from fastapi import Depends, HTTPException, status
+# Depends is used by FastAPI to inject dependencies such as the database session or
+# the authenticated user into route handlers.
+# HTTPException is raised for authentication/authorization failures to return proper
+# API error responses.
+# status provides standard HTTP status codes like 401 Unauthorized and 403 Forbidden.
+
 from fastapi.security import OAuth2PasswordBearer
+# OAuth2PasswordBearer is the security scheme that extracts the bearer token from the
+# Authorization header. It enables FastAPI to automatically parse JWTs sent by clients.
+
 from sqlalchemy import select
+# select is used to build SQLAlchemy queries to fetch the user record from the database
+# based on the JWT subject claim. It is necessary for validating that the user still
+# exists and is present in the app's database.
 
 from sqlalchemy.ext.asyncio import AsyncSession
+# AsyncSession is the async SQLAlchemy session type used for database operations in
+# async FastAPI endpoints and dependencies. It provides request-scoped DB access that
+# can be awaited without blocking the event loop.
+
 from app.database import AsyncSessionLocal
+# AsyncSessionLocal is the database engine/session factory used to open a new async
+# database session for each request. This dependency is required to query the database
+# while respecting SQLAlchemy async patterns and request-scoped cleanup.
+
 from app.models import User, Technician_RBAC
+# User is the application model representing authenticated users and is used to load
+# the current user from the database after token validation.
+# Technician_RBAC is the role enum used to enforce role-based access control on routes.
+# These models are necessary for identity checks and permissions validation.
+
 from app.security import decode_access_token
+# decode_access_token is the custom JWT decoding helper that validates the token's
+# signature and expiration. This is needed so get_current_user() can trust the token
+# claims and extract the user's identity safely.
 
 # This dependency opens a database session for each request and ensures the session is
 # properly closed after the request completes. FastAPI dependencies can inject this
 # session into route handlers and other dependencies, which is important for database
 # queries that need to read or update application data in a request-scoped context.
+# An async function can pause at await points without blocking other tasks, while a
+# normal function runs synchronously and blocks until it returns.
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionLocal() as session:
         yield session

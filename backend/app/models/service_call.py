@@ -10,6 +10,7 @@ from .enums import Service_Call_Priority, Service_Call_Status
 if TYPE_CHECKING:
     from .technician import Technician
     from .atm import ATM
+    from .diagnostic_report import DiagnosticReport
 
 class ServiceCall(Base):
     __tablename__ = "service_calls"
@@ -26,8 +27,10 @@ class ServiceCall(Base):
     technician_id: Mapped[int] = mapped_column(Integer, ForeignKey("technicians.id"))
     
 
-    atms: Mapped["ATM"] = relationship(back_populates="service_call")    
-    technicians: Mapped["Technician"] = relationship(back_populates="service_calls")
+    atm: Mapped["ATM"] = relationship(back_populates="service_calls")    
+    technician: Mapped["Technician"] = relationship(back_populates="service_calls")
+    diagnostic_reports: Mapped[list["DiagnosticReport"]] = relationship(back_populates="service_call")
+
 
     def __repr__(self) -> str:
         return (f"Service call attributes: {self.title}{self.atm_id}{self.technician_id}{self.priority}{self.status}")

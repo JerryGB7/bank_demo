@@ -20,9 +20,9 @@ class Technician(Base):
     branch_id: Mapped[int] = mapped_column(Integer, ForeignKey("branches.id"))
 
      # Each technician belongs to one branch.
-    branches: Mapped["Branch"] = relationship(back_populates="technicians")
+    branch: Mapped["Branch"] = relationship(back_populates="technicians")
     atms: Mapped[list["ATM"]] = relationship(back_populates="technician")  
-    service_calls: Mapped[list["ServiceCall"]] = relationship(back_populates="technicians")
+    service_calls: Mapped[list["ServiceCall"]] = relationship(back_populates="technician")
 
 
     def __repr__(self) -> str:

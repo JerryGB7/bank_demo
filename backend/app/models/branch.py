@@ -21,7 +21,7 @@ class Branch(Base):
     supervisor_id: Mapped[int] = mapped_column(Integer)
 
     atms: Mapped[list["ATM"]] = relationship(back_populates="branch")
-    technicians: Mapped[list["Technician"]] = relationship(back_populates="branches")
+    technicians: Mapped[list["Technician"]] = relationship(back_populates="branch")
 
     def __repr__(self) -> str:
             return (f"ID {self.id}, name: {self.name}, location: {self.location_region}, capacity: {self.capacity}")
