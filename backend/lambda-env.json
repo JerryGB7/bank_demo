@@ -1,0 +1,8 @@
+
+{
+    "Variables": {
+        "DATABASE_URL": "postgresql+asyncpg://postgres:postgres@bankdemo-db.cxc0cqs26g9r.us-east-2.rds.amazonaws.com:5432/bankdemo",
+        "SECRET_KEY": "2d20f0f7475ab1c4f285e42a2397c2d75bd4ca7563424d992b04d0413552f34b",
+        "FRONTEND_ORIGIN": "http://localhost:5173"
+    }
+}
