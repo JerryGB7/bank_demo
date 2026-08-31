@@ -27,9 +27,9 @@ class ServiceCall(Base):
     technician_id: Mapped[int] = mapped_column(Integer, ForeignKey("technicians.id"))
     
 
-    atms: Mapped["ATM"] = relationship(back_populates="service_call")    
-    technicians: Mapped["Technician"] = relationship(back_populates="service_calls")
-    diagnostic_reports: Mapped["DiagnosticReport"] = relationship(back_populates="service_call")
+    atm: Mapped["ATM"] = relationship(back_populates="service_calls")    
+    technician: Mapped["Technician"] = relationship(back_populates="service_calls")
+    diagnostic_reports: Mapped[list["DiagnosticReport"]] = relationship(back_populates="service_call")
 
 
     def __repr__(self) -> str:

@@ -57,7 +57,7 @@ class ATM(Base):
     # An ATM belongs to one branch and one technician, and may have service calls.
     branch: Mapped["Branch"] = relationship(back_populates="atms")
     technician: Mapped["Technician"] = relationship(back_populates="atms")
-    service_call: Mapped["ServiceCall"] = relationship(back_populates="atms")
+    service_calls: Mapped[list["ServiceCall"]] = relationship(back_populates="atm")
 
     # Method to check whether the ATM is currently in maintenance.
     def needs_maintenance(self) -> bool:
