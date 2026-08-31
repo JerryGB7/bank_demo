@@ -40,7 +40,7 @@ CREATE TABLE service_calls(
 
 CREATE TABLE diagnostic_reports(
     id SERIAL PRIMARY KEY,
-    service_call_id INTEGER NOT NULL REFERENCES service_calls(id)
+    service_call_id INTEGER NOT NULL REFERENCES service_calls(id),
     file_url TEXT NOT NULL,
     notes TEXT,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
