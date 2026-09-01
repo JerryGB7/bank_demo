@@ -5,7 +5,7 @@ import axios from 'axios'
 //axios.create is a function that builds a reusable pre-configured client
 const apiClient = axios.create({
     // fastapi endpoint
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000',
+    baseURL: 'http://127.0.0.1:8000/'
 })
 
 // the request interceptor is needed to check every outgoing request

@@ -8,7 +8,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     """when a user is created, that is when you want to set the password"""
-    password: str = Field(min_length=15)
+    password: str
 
 class UserRead(UserBase):
     """Shape of an atm in any API Response"""

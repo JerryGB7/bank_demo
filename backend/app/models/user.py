@@ -34,7 +34,7 @@ class User(Base):
     # not immediately get usable login credentials.
     # A hashed value is one-way, so the application must verify passwords by
     # hashing the submitted password and comparing it to this stored hash.
-    hashed_password: Mapped[str] = mapped_column(String(255))
+    password_hash: Mapped[str] = mapped_column(String(255))
 
     # Role is stored as a database enum backed by the Technician_RBAC Python Enum.
     # This is important because it restricts values to a known set of roles, making

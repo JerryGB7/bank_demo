@@ -32,10 +32,10 @@ async def login(
     user = result.scalar_one_or_none()
 
     # Reject the login if the user is not found or the password is incorrect.
-    if user is None or not verify_password(form_data.password, user.hashed_password):
+    if user is None or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="UNAUTHORIZED",
+            detail="Incorrect username or password",
         )
 
     # Build the JWT payload with the username and role.
@@ -74,7 +74,7 @@ async def registered_user(
     # Passwords are hashed before being stored so the database never keeps plain-text passwords.
     user = User(
         username=payload.username,
-        hashed_password=hash_password(payload.password),
+        password_hash=hash_password(payload.password),
         role=payload.role,
     )
 

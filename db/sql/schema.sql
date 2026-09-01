@@ -25,7 +25,7 @@ CREATE TABLE atms(
     status atm_status NOT NULL DEFAULT 'Operational',
     cash_level INTEGER NOT NULL,
     branch_id INTEGER NOT NULL REFERENCES branches(id),
-    technician_id INTEGER NOT NULL REFERENCES technicians(id)
+    technician_id INTEGER REFERENCES technicians(id)
 );
 
 
