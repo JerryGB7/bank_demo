@@ -48,7 +48,7 @@ function ATMDataGrid({onNotification = () => {}}){
         {field: 'technician_id', headerName: "Technician ID", width: 120, type: "number"},
         ...(canCreate ? [{
             field: "actions",
-            headerName: "Actions",
+            headerName: "Delete",
             width: 90,
             sortable: false,
             filterable: false,
