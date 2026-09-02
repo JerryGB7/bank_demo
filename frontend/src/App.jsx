@@ -42,7 +42,7 @@ function Dashboard(){
         </Button>
         {showATMs && (
           <Box sx={{mb: 4}}>
-            <ATMDataGrid />
+            <ATMDataGrid onNotification={setNotification} />
           </Box>
         )}
         <Typography variant="h5" component="h2" gutterBottom>
@@ -57,8 +57,8 @@ function Dashboard(){
         autoHideDuration={6000}
         onClose={() => setNotification(null)}
       >
-        <Alert severity="success" onClose={() => setNotification(null)}>
-          {notification}
+        <Alert severity={notification?.severity ?? "success"} onClose={() => setNotification(null)}>
+          {notification?.message ?? notification}
         </Alert>
       </Snackbar>
     </>
