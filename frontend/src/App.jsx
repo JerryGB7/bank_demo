@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Container, Typography, Box, Button } from "@mui/material"
+import { Container, Typography, Box, Button, Snackbar, Alert } from "@mui/material"
 
 import AppHeader from "./components/layout/AppHeader"
 import ATMDataGrid from "./components/atms/ATMDataGrid.jsx"
@@ -15,6 +15,7 @@ import { AuthProvider, useAuth } from "./context/AuthContext"
 function Dashboard(){
   const {user, logout} = useAuth()
   const [showATMs, setShowATMs] = useState(false)
+  const [notification, setNotification] = useState(null)
 
   return(
     <>
@@ -51,6 +52,15 @@ function Dashboard(){
           <ServiceCallDataGrid />
         </Box>
       </Container>
+      <Snackbar
+        open={Boolean(notification)}
+        autoHideDuration={6000}
+        onClose={() => setNotification(null)}
+      >
+        <Alert severity="success" onClose={() => setNotification(null)}>
+          {notification}
+        </Alert>
+      </Snackbar>
     </>
   )
 };

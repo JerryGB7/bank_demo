@@ -16,6 +16,13 @@ async def test_login_invalid_credentials(client):
     )
     assert response.status_code == 401
 
+async def test_case_insensitive_login(client, seeded_user):
+    response = await client.post(
+        "/auth/token",
+        data={"username": "ADMin", "password": "adminpass"}
+    )
+    assert response.status_code == 200
+
 async def test_register_requires_admin(client, seeded_user):
     payload = {"username": "newuser", "password": "newpass", "role": "Field-Technician"}
     technician_response = await client.post(

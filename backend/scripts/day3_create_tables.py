@@ -1,6 +1,3 @@
-"""run from the backend direcory with .venv enables using:
-python -m scripts.day3_create_tables
-"""
 
 import asyncio
 
