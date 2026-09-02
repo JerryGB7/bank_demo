@@ -1,10 +1,13 @@
 import { useState } from "react"
-import { Container, Typography, Box, Button, Snackbar, Alert } from "@mui/material"
+import { Container, Typography, Box, Snackbar, Alert } from "@mui/material"
 
 import AppHeader from "./components/layout/AppHeader"
 import ATMDataGrid from "./components/atms/ATMDataGrid.jsx"
 import ServiceCallDataGrid from "./components/servicecalls/ServiceCallDataGrid.jsx"
 import BranchDataGrid from "./components/branches/BranchDataGrid.jsx"
+import MaintenanceFlags from "./components/analytics/MaintenanceFlags.jsx"
+import LowCashAlert from "./components/analytics/LowCashAlert.jsx"
+import CoLocationDiscrepancy from "./components/analytics/CoLocationDiscrepancy.jsx"
 
 
 import LoginForm from "./components/auth/LoginForm"
@@ -23,6 +26,15 @@ function Dashboard(){
         <Typography variant="h3" component="h2" gutterBottom>
           Branch Operations Command Center
         </Typography>
+        <Box sx={{mb: 4}}>
+          <MaintenanceFlags />
+        </Box>
+        <Box sx={{mb: 4}}>
+          <LowCashAlert />
+        </Box>
+        <Box sx={{mb: 4}}>
+          <CoLocationDiscrepancy />
+        </Box>
         <Typography variant="h5" component="h2" gutterBottom>
           All Branches
         </Typography>
