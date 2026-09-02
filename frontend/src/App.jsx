@@ -14,7 +14,6 @@ import { AuthProvider, useAuth } from "./context/AuthContext"
 
 function Dashboard(){
   const {user, logout} = useAuth()
-  const [showATMs, setShowATMs] = useState(false)
   const [notification, setNotification] = useState(null)
 
   return(
@@ -33,18 +32,9 @@ function Dashboard(){
         <Typography variant="h5" component="h2" gutterBottom>
           List of ATMS
         </Typography>
-        <Button
-          variant="contained"
-          onClick={() => setShowATMs((visible) => !visible)}
-          sx={{mb: 2}}
-        >
-          {showATMs ? "Hide ATMs" : "Show ATMs"}
-        </Button>
-        {showATMs && (
           <Box sx={{mb: 4}}>
             <ATMDataGrid onNotification={setNotification} />
           </Box>
-        )}
         <Typography variant="h5" component="h2" gutterBottom>
           Current Service Calls
         </Typography>

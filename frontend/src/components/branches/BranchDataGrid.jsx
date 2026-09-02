@@ -6,8 +6,8 @@ import apiClient from "../../api/client"
 // defining our data grid columns and map them to our backend API response data
 const columns = [
     {field: 'id', headerName: 'ID', width: 70},
-    {field: 'name', headerName: 'Serial Number', width: 150},
-    {field: 'location_region', headerName: "Model", width: 160},
+    {field: 'name', headerName: 'Model', width: 150},
+    {field: 'location_region', headerName: "Location", width: 160},
     {field: 'capacity', headerName: "Capacity", width: 120, type: "number"},
     {field: 'supervisor_id', headerName: "Supervisor ID", width: 120, type: "number"},
 ];
@@ -48,10 +48,9 @@ function BranchDataGrid(){
     if (error) return <Alert severity="error">{error}</Alert>
 
     return(
-        <Box sx={{height: 400, width:'100%'}}>
-            <DataGrid rows={branches} columns={columns} getRowId={(row) => row.id}/>
+        <Box sx={{height: 400, width: '100%'}}>
+            <DataGrid sx={{width: '100%'}} rows={branches} columns={columns} getRowId={(row) => row.id}/>
         </Box>
-
     )
 }
 

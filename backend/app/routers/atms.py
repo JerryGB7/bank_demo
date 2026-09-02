@@ -72,3 +72,16 @@ async def create_atm(payload: ATMCreate, db: AsyncSession = Depends(get_db),
    await db.commit()
    await db.refresh(atm)
    return atm
+
+@router.delete("/{atm_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_atm(atm_id: int, db: AsyncSession = Depends(get_db),
+                     _: User = Depends(require_role(Technician_RBAC.OPERATION_MANAGER))):
+    atm = await db.get(ATM, atm_id)
+    if atm is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"ATM with {atm_id} not found"
+        )
+
+    await db.delete(atm)
+    await db.commit()

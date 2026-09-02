@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react"
 import {DataGrid} from "@mui/x-data-grid"
-import {Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, TextField} from "@mui/material"
+import {Alert, Box, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, TextField, Tooltip} from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
 import apiClient from "../../api/client"
 import {useAuth} from "../../context/AuthContext"
 
@@ -8,16 +9,6 @@ import {useAuth} from "../../context/AuthContext"
 // appear as columns and how to label them. This is important because the backend
 // returns objects like { id, serial_number, model, ... }, and the grid needs a UI
 // mapping between those response fields and readable headers/column widths.
-const columns = [
-    {field: 'id', headerName: 'ID', width: 70},
-    {field: 'serial_number', headerName: 'Serial Number', width: 150},
-    {field: 'model', headerName: "Model", width: 160},
-    {field: 'status', headerName: "ATM status", width: 120},
-    {field: 'cash_level', headerName: "Cash Level", width: 120, type: "number"},
-    {field: 'branch_id', headerName: "Branch ID", width: 120, type: "number"},
-    {field: 'technician_id', headerName: "Technician ID", width: 120, type: "number"},
-];
-
 // Local component state is used to manage the table's lifecycle and UI feedback:
 // - atms: stores the ATM records returned from the backend
 // - loading: tracks whether the API call is still in progress
@@ -33,7 +24,7 @@ const emptyForm = {
     technician_id: "",
 }
 
-function ATMDataGrid({onNotification}){
+function ATMDataGrid({onNotification = () => {}}){
     const {user} = useAuth()
     const [atms, setATMS] = useState([])
     const [loading, setLoading] = useState(true)
@@ -42,8 +33,38 @@ function ATMDataGrid({onNotification}){
     const [form, setForm] = useState(emptyForm)
     const [createError, setCreateError] = useState(null)
     const [creating, setCreating] = useState(false)
+    const [deleteTarget, setDeleteTarget] = useState(null)
+    const [deleting, setDeleting] = useState(false)
 
     const canCreate = user?.role === "Operation-Manager"
+
+    const columns = [
+        {field: 'id', headerName: 'ID', width: 70},
+        {field: 'serial_number', headerName: 'Serial Number', width: 150},
+        {field: 'model', headerName: "Model", width: 160},
+        {field: 'status', headerName: "ATM status", width: 120},
+        {field: 'cash_level', headerName: "Cash Level", width: 120, type: "number"},
+        {field: 'branch_id', headerName: "Branch ID", width: 120, type: "number"},
+        {field: 'technician_id', headerName: "Technician ID", width: 120, type: "number"},
+        ...(canCreate ? [{
+            field: "actions",
+            headerName: "Actions",
+            width: 90,
+            sortable: false,
+            filterable: false,
+            renderCell: ({row}) => (
+                <Tooltip title="Delete ATM">
+                    <IconButton
+                        aria-label={`Delete ATM ${row.id}`}
+                        color="error"
+                        onClick={() => setDeleteTarget(row)}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+            ),
+        }] : []),
+    ]
 
     function updateForm(event){
         setForm((current) => ({...current, [event.target.name]: event.target.value}))
@@ -79,7 +100,8 @@ function ATMDataGrid({onNotification}){
                 technician_id: form.technician_id ? Number(form.technician_id) : null,
             })
             setATMS((current) => [...current, response.data])
-            closeCreateDialog()
+            setCreateOpen(false)
+            setForm(emptyForm)
             onNotification({severity: "success", message: "ATM created successfully."})
         } catch (requestError) {
             const detail = requestError.response?.data?.detail
@@ -87,6 +109,23 @@ function ATMDataGrid({onNotification}){
             onNotification({severity: "error", message: typeof detail === "string" ? detail : "The ATM could not be created."})
         } finally {
             setCreating(false)
+        }
+    }
+
+    async function handleDelete(){
+        if (!deleteTarget) return
+
+        setDeleting(true)
+        try {
+            await apiClient.delete(`/atms/${deleteTarget.id}`)
+            setATMS((current) => current.filter((atm) => atm.id !== deleteTarget.id))
+            setDeleteTarget(null)
+            onNotification({severity: "success", message: "ATM deleted successfully."})
+        } catch (requestError) {
+            const detail = requestError.response?.data?.detail
+            onNotification({severity: "error", message: typeof detail === "string" ? detail : "The ATM could not be deleted."})
+        } finally {
+            setDeleting(false)
         }
     }
 
@@ -174,6 +213,18 @@ function ATMDataGrid({onNotification}){
                     <Button type="submit" variant="contained" disabled={creating}>{creating ? "Creating..." : "Create ATM"}</Button>
                 </DialogActions>
             </Box>
+        </Dialog>
+        <Dialog open={Boolean(deleteTarget)} onClose={() => !deleting && setDeleteTarget(null)}>
+            <DialogTitle>Delete ATM?</DialogTitle>
+            <DialogContent>
+                Are you sure you want to delete ATM {deleteTarget?.id}? This action cannot be undone.
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setDeleteTarget(null)} disabled={deleting}>Cancel</Button>
+                <Button onClick={handleDelete} variant="contained" color="error" disabled={deleting}>
+                    {deleting ? "Deleting..." : "Delete ATM"}
+                </Button>
+            </DialogActions>
         </Dialog>
         </>
     )
