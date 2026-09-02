@@ -18,9 +18,10 @@ from fastapi.middleware.cors import CORSMiddleware
 # Each router groups related endpoints such as branches, ATMs, authentication,
 # and service calls, making the application easier to organize and maintain.
 from app.routers import atms, branches, auth, service_calls
+from app.config import settings
 
 
-FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "http://localhost:5173")
+FRONTEND_ORIGIN = settings.frontend_origin
 
 
 # Create the FastAPI application instance.

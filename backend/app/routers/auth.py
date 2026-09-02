@@ -32,7 +32,7 @@ async def login(
     user = result.scalar_one_or_none()
 
     # Reject the login if the user is not found or the password is incorrect.
-    if user is None or not verify_password(form_data.password, user.password_hash):
+    if user is None or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
@@ -74,7 +74,7 @@ async def registered_user(
     # Passwords are hashed before being stored so the database never keeps plain-text passwords.
     user = User(
         username=payload.username,
-        password_hash=hash_password(payload.password),
+        hashed_password=hash_password(payload.password),
         role=payload.role,
     )
 

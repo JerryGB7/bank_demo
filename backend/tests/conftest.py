@@ -44,17 +44,17 @@ async def seeded_user(db_session):
     users= {
         "admin": User(
             username="admin",
-            password_hash=hash_password("adminpass"),
+            hashed_password=hash_password("adminpass"),
             role=Technician_RBAC.OPERATION_MANAGER,
         ),
         "technician": User(
             username="technician",
-            password_hash=hash_password("techpass"),
+            hashed_password=hash_password("techpass"),
             role=Technician_RBAC.FIELD_TECHNICIAN,
         ),
         "auditor": User(
             username="auditor",
-            password_hash=hash_password("auditorpass"),
+            hashed_password=hash_password("auditorpass"),
             role=Technician_RBAC.AUDITOR,
         )
     }
