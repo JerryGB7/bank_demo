@@ -9,6 +9,7 @@ import MaintenanceFlags from "./components/analytics/MaintenanceFlags.jsx"
 import LowCashAlert from "./components/analytics/LowCashAlert.jsx"
 import CoLocationDiscrepancy from "./components/analytics/CoLocationDiscrepancy.jsx"
 import ReliabilityMetrics from "./components/analytics/ReliabilityMetrics.jsx"
+import ReportingLines from "./components/analytics/ReportingLines.jsx"
 
 
 import LoginForm from "./components/auth/LoginForm"
@@ -38,6 +39,9 @@ function Dashboard(){
         </Box>
         <Box sx={{mb: 4}}>
           <ReliabilityMetrics />
+        </Box>
+        <Box sx={{mb: 4}}>
+          <ReportingLines />
         </Box>
         <Typography variant="h5" component="h2" gutterBottom>
           All Branches

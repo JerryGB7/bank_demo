@@ -4,7 +4,7 @@ from sqlalchemy import case, func, select
 
 from app.schemas.service_call import ReliabilityMetric, ServiceCallCreate,ServiceCallRead
 from app.dependencies import get_db, get_current_user, require_role
-from app.models import ATM, ServiceCall, User, Technician_RBAC
+from app.models import ATM, Branch, ServiceCall, Technician, User, Technician_RBAC
 from app.models.enums import Service_Call_Priority, Service_Call_Status
 
 router = APIRouter(prefix="/service_calls", tags=["service_calls"])
@@ -83,6 +83,35 @@ async def get_reliability_metrics(
         )
         for row in rows
     ]
+
+
+@router.get("/reporting_lines", response_model=dict[str, int])
+async def get_reporting_lines(
+    supervisor_id: int,
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
+) -> dict[str, int]:
+    """Count technicians under a supervisor with at least one active call."""
+    active_statuses = (
+        Service_Call_Status.PENDING,
+        Service_Call_Status.IN_PROGRESS,
+    )
+    statement = (
+        select(func.count(func.distinct(Technician.id)))
+        .select_from(Technician)
+        .join(Branch, Technician.branch_id == Branch.id)
+        .join(ServiceCall, ServiceCall.technician_id == Technician.id)
+        .where(
+            Branch.supervisor_id == supervisor_id,
+            ServiceCall.status.in_(active_statuses),
+        )
+    )
+
+    technician_count = await db.scalar(statement) or 0
+    return {
+        "supervisor_id": supervisor_id,
+        "technicians_with_active_calls": technician_count,
+    }
 
 
 #-----------------------------------------------------------------------------------
