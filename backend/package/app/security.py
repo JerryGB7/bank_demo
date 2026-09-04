@@ -3,11 +3,10 @@ from datetime import datetime, timedelta, timezone
 import bcrypt
 import jwt
 
-# Secret key used to sign JWTs. In production, this should be set via an environment
-# variable so it is not hardcoded in source code. The fallback value is only a placeholder
-# and should never be used in a real deployment because anyone with access to the code could
-# forge valid tokens if this value is known.
-SECRET_KEY = os.environ.get("SECRET_KEY", "<replace-with-a-real-secret-key>")
+from .config import settings
+
+# Secret key used to sign JWTs.
+SECRET_KEY = settings.secret_key
 
 # JWT signing algorithm. HS256 means the token is signed with a symmetric secret key,
 # which is appropriate here because the same backend secret is used to both create and

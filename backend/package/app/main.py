@@ -5,7 +5,9 @@ import os
 # includes all route modules, and defines a basic health check endpoint.
 # This file is important because it is the central place where the backend
 # application is assembled and made available to clients.
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 # CORS middleware allows the backend to accept requests from a different origin,
 # such as the local frontend dev server running on localhost:5173.
 # This is important when the frontend and backend are served separately during
@@ -16,9 +18,15 @@ from fastapi.middleware.cors import CORSMiddleware
 # Each router groups related endpoints such as branches, ATMs, authentication,
 # and service calls, making the application easier to organize and maintain.
 from app.routers import atms, branches, auth, service_calls
+from app.config import settings
 
 
-FRONTEND_ORIGIN = os.environ.get("FRONTEND_ORIGIN", "http://localhost:5173")
+FRONTEND_ORIGIN = settings.frontend_origin
+ALLOWED_ORIGINS = [
+    FRONTEND_ORIGIN,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 
 # Create the FastAPI application instance.
@@ -37,7 +45,7 @@ app.add_middleware(
     CORSMiddleware,
     # Allow the frontend running on the Vite dev server to call the API.
     # This is the origin that the browser sees when the frontend is served locally.
-    allow_origins=[FRONTEND_ORIGIN],
+    allow_origins=ALLOWED_ORIGINS,
     # Allow cookies and credentials to be included in cross-origin requests.
     # This is especially important for JWT-based authentication flows.
     allow_credentials=True,
@@ -66,3 +74,19 @@ async def health_check() -> dict[str, str]:
 @app.get("/version", tags=["health"])
 async def version() -> dict[str, str]:
     return {"version": app.version}
+
+@app.exception_handler(IntegrityError)
+async def integrity_error_handler(request: Request, exc: IntegrityError) -> JSONResponse:
+    # Handle database integrity errors gracefully by returning a structured JSON response.
+    # This prevents the application from crashing and provides useful feedback to clients.
+    return JSONResponse(
+        status_code=409,
+        content={"detail": "Database integrity error: likely a duplicate or constraint violation."},
+    )
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "An unexpected error has occurred. Please try again later."}
+    )

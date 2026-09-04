@@ -1,14 +1,10 @@
 import os
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from .config import settings
 
 # Load the database connection string from the environment.
-# This keeps credentials and host information out of the codebase and allows
-# deployment-specific configuration (local dev, Docker, production, etc.).
-# If the environment variable is not set, fall back to the local PostgreSQL URL.
-DATABASE_URL = os.environ.get(
-    "DATABASE_URL",
-    "postgresql+asyncpg://postgres:postgres@localhost:5432/bank_db",
-)
+
+DATABASE_URL = settings.database_url 
 
 # Create the asynchronous SQLAlchemy engine.
 # The engine is the central object that manages database connections and

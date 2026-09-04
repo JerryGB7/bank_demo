@@ -51,7 +51,7 @@ class ATM(Base):
     # Cash level and the IDs for the related branch and technician.
     cash_level: Mapped[int] = mapped_column(Integer)
     branch_id: Mapped[int] = mapped_column(Integer, ForeignKey("branches.id"))
-    technician_id: Mapped[int] = mapped_column(Integer, ForeignKey("technicians.id"))
+    technician_id: Mapped[int | None] = mapped_column(Integer, ForeignKey("technicians.id"), nullable=True)
 
     # Relationships to related models.
     # An ATM belongs to one branch and one technician, and may have service calls.

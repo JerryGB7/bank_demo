@@ -12,7 +12,7 @@ class ATMBase(BaseModel):
     status: ATMStatus = ATMStatus.OPERATIONAL
     cash_level: int = Field(ge=0, le=100)
     branch_id: int
-    technician_id: int
+    technician_id: int | None = None
 
 
 # Request payload for creating a new ATM.

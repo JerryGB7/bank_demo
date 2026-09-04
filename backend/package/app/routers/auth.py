@@ -28,14 +28,14 @@ async def login(
     db: AsyncSession = Depends(get_db)
 ) -> Token:
     # Search for the matching user record by username.
-    result = await db.execute(select(User).where(User.username == form_data.username))
+    result = await db.execute(select(User).where(User.username == form_data.username.lower()))
     user = result.scalar_one_or_none()
 
     # Reject the login if the user is not found or the password is incorrect.
     if user is None or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="UNAUTHORIZED",
+            detail="Incorrect username or password",
         )
 
     # Build the JWT payload with the username and role.
@@ -63,7 +63,7 @@ async def registered_user(
     _: User = Depends(require_role(Technician_RBAC.OPERATION_MANAGER))
 ) -> User:
     # Check if this username already exists before creating a duplicate account.
-    existing = await db.execute(select(User).where(User.username == payload.username))
+    existing = await db.execute(select(User).where(User.username == payload.username.lower()))
     if existing.scalar_one_or_none():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -73,7 +73,7 @@ async def registered_user(
     # Create a new User object from the incoming data.
     # Passwords are hashed before being stored so the database never keeps plain-text passwords.
     user = User(
-        username=payload.username,
+        username=payload.username.lower(),
         hashed_password=hash_password(payload.password),
         role=payload.role,
     )
