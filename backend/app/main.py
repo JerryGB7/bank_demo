@@ -22,6 +22,11 @@ from app.config import settings
 
 
 FRONTEND_ORIGIN = settings.frontend_origin
+ALLOWED_ORIGINS = [
+    FRONTEND_ORIGIN,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
 
 
 # Create the FastAPI application instance.
@@ -40,7 +45,7 @@ app.add_middleware(
     CORSMiddleware,
     # Allow the frontend running on the Vite dev server to call the API.
     # This is the origin that the browser sees when the frontend is served locally.
-    allow_origins=[FRONTEND_ORIGIN],
+    allow_origins=ALLOWED_ORIGINS,
     # Allow cookies and credentials to be included in cross-origin requests.
     # This is especially important for JWT-based authentication flows.
     allow_credentials=True,

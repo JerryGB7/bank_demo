@@ -16,7 +16,7 @@ function LoginForm(){
         try {
             await login(username, password)
         } catch (error) {
-            if(err.response?.status === 401) {
+            if(error.response?.status === 401) {
                 setError('incorrect username or password')
             } else {
                 setError('an unexpected error occurred')
