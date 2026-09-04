@@ -3,17 +3,17 @@
 # bash bin/seed.sh local
 # bash bin/seed.sh rds
 
-TARGET="{#1:local}"
+TARGET="${1:-local}"
 if [ "$TARGET" == "local" ]; then
 
     # TODO: replace the detailed in the db url with your details
-    export DATABASE_URL="postgresql+asyncpg://postgres:<your-password>@127.0.0.1:5432/bank_dev"
+    export DATABASE_URL="postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/bankdemo"
     PSQL_HOST="127.0.0.1"
-    PSQL_DB="bank_dev"
-elif ["$TARGET" == "rds"]; then
-    export DATABASE_URL="postgresql+asyncpg://postgres:<your-password>@<your-rds-endpoint>:5432/bank_dev"
-    PSQL_HOST="<your-rds-endpoint>"
-    PSQL_DB="bank_dev"
+    PSQL_DB="bankdemo"
+elif [ "$TARGET" == "rds" ]; then
+    export DATABASE_URL="postgresql+asyncpg://postgres:postgres@bankdemo-db.cxc0cqs26g9r.us-east-2.rds.amazonaws.com/bankdemo-db"
+    PSQL_HOST="bankdemo-db.cxc0cqs26g9r.us-east-2.rds.amazonaws.com"
+    PSQL_DB="bankdemo-db"
 else 
     echo "Invalid target specified. Use 'local' or 'rds'."
     exit 1
