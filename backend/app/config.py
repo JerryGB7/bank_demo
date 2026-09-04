@@ -6,6 +6,6 @@ class Settings(BaseSettings):
     secret_key: str 
     frontend_origin: str = "http://localhost:5173"
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(env_file=".env")
 
 settings = Settings()

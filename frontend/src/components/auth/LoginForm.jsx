@@ -19,7 +19,7 @@ function LoginForm(){
             if(error.response?.status === 401) {
                 setError('incorrect username or password')
             } else {
-                setError('an unexpected error occurred')
+                setError('An unexpected error occurred')
             }
         }
     }
