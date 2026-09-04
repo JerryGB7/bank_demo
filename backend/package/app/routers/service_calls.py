@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import func, select
+from sqlalchemy import case, func, select
 
-from app.schemas.service_call import ServiceCallCreate,ServiceCallRead
+from app.schemas.service_call import ReliabilityMetric, ServiceCallCreate,ServiceCallRead
 from app.dependencies import get_db, get_current_user, require_role
-from app.models import ServiceCall, User, Technician_RBAC
+from app.models import ATM, ServiceCall, User, Technician_RBAC
 from app.models.enums import Service_Call_Priority, Service_Call_Status
 
 router = APIRouter(prefix="/service_calls", tags=["service_calls"])
@@ -48,6 +48,41 @@ async def complete_failed_service(db: AsyncSession = Depends(get_db), _: User = 
     failed_count = await db.scalar(failed_statement)
 
     return (f"{failed_count / total_count * 100 if total_count else 0.0}%")
+
+
+@router.get("/reliability_metrics", response_model=list[ReliabilityMetric])
+async def get_reliability_metrics(
+    db: AsyncSession = Depends(get_db),
+    _: User = Depends(get_current_user),
+) -> list[ReliabilityMetric]:
+    """Return completed and failed service-call ratios for each ATM model."""
+    completed_count = func.count(case((ServiceCall.status == Service_Call_Status.COMPLETED, 1)))
+    failed_count = func.count(case((ServiceCall.status == Service_Call_Status.FAILED, 1)))
+
+    statement = (
+        select(
+            ATM.model.label("model"),
+            completed_count.label("completed_count"),
+            failed_count.label("failed_count"),
+        )
+        .join(ServiceCall, ServiceCall.atm_id == ATM.id)
+        .where(ServiceCall.status.in_((Service_Call_Status.COMPLETED, Service_Call_Status.FAILED)))
+        .group_by(ATM.model)
+        .order_by(ATM.model)
+    )
+
+    rows = (await db.execute(statement)).mappings().all()
+    return [
+        ReliabilityMetric(
+            model=row["model"],
+            completed_count=row["completed_count"],
+            failed_count=row["failed_count"],
+            total_resolved=row["completed_count"] + row["failed_count"],
+            completion_ratio=(row["completed_count"] / (row["completed_count"] + row["failed_count"])) * 100,
+            failure_ratio=(row["failed_count"] / (row["completed_count"] + row["failed_count"])) * 100,
+        )
+        for row in rows
+    ]
 
 
 #-----------------------------------------------------------------------------------
