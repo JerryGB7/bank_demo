@@ -60,7 +60,7 @@ function MaintenanceFlags(){
 				<Stack direction={{xs: "column", sm: "row"}} justifyContent="space-between" gap={2} mb={2}>
 					<Box>
 						<Stack direction="row" spacing={1} alignItems="center">
-							<BuildCircleOutlinedIcon color="warning" />
+							
 							<Typography variant="h6" component="h3" fontWeight={700}>
 								Maintenance Flags
 							</Typography>

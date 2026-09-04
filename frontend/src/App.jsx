@@ -14,6 +14,7 @@ import ReportingLines from "./components/analytics/ReportingLines.jsx"
 
 import LoginForm from "./components/auth/LoginForm"
 import { AuthProvider, useAuth } from "./context/AuthContext"
+import darkBlueBackground from "./assets/OIP.png"
 
 
 
@@ -22,11 +23,20 @@ function Dashboard(){
   const [notification, setNotification] = useState(null)
 
   return(
-    <>
+    <Box sx={{
+      minHeight: '100vh',
+      backgroundImage: `linear-gradient(rgba(7, 22, 42, 0.3), rgba(7, 22, 42, 0.3)), url(${darkBlueBackground})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      '& h1, & h2, & h3': {
+        textShadow: '1px 0 #fff, -1px 0 #fff, 0 1px #fff, 0 -1px #fff',
+      },
+    }}>
       <AppHeader username={user?.sub} role={user?.role} onLogout={logout} />
       <Container maxWidth="lg" sx={{mt: 4}}>
         <Typography variant="h3" component="h2" gutterBottom>
-          Branch Operations Command Center
+          ATM Operations Command Center
         </Typography>
         <Box sx={{mb: 4}}>
           <MaintenanceFlags />
@@ -71,7 +81,7 @@ function Dashboard(){
           {notification?.message ?? notification}
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   )
 };
 

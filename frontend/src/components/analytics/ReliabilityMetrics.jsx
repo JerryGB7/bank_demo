@@ -35,7 +35,7 @@ function ReliabilityMetrics(){
 		<Card variant="outlined" sx={{borderColor: "#d7dee8", textAlign: "left"}}>
 			<CardContent sx={{p: {xs: 2, sm: 3}}}>
 				<Stack direction="row" spacing={1} alignItems="center" mb={0.5}>
-					<AssessmentOutlinedIcon color="primary" />
+					
 					<Typography variant="h6" component="h3" fontWeight={700}>
 						Reliability Metrics
 					</Typography>

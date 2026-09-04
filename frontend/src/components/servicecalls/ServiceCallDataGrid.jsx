@@ -124,10 +124,10 @@ function ServiceCallDataGrid(){
             )}
             <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1.5}}>
                 <Box>
-                    <Typography variant="overline" sx={{color: 'primary.main', fontWeight: 700, letterSpacing: 1.2}}>
+                    <Typography variant="h6" sx={{color: '#fff', fontWeight: 700, letterSpacing: 1.2}}>
                         Operations queue
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography variant="h8" color="secondary">
                         Update priority or status directly from the table.
                     </Typography>
                 </Box>

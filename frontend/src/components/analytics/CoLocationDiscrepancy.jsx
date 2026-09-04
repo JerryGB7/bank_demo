@@ -66,7 +66,7 @@ function CoLocationDiscrepancy(){
 	return (
 		<Card variant="outlined" sx={{borderColor: "#d7dee8", textAlign: "left"}}>
 			<CardContent>
-				<Stack direction="row" justifyContent="space-between" alignItems="center" gap={2}>
+				<Stack direction="row" alignItems="center" gap={2} sx={{width: "100%"}}>
 					<Box>
 						<Typography variant="h6" component="h3" fontWeight={700}>
 							Co-location Discrepancy
@@ -75,7 +75,7 @@ function CoLocationDiscrepancy(){
 							ATMs assigned to technicians based at another branch
 						</Typography>
 					</Box>
-					<Typography variant="h4" color="warning.main" fontWeight={800}>
+					<Typography variant="h4" color="warning.main" fontWeight={800} sx={{marginLeft: "auto"}}>
 						{discrepancyCount}
 					</Typography>
 				</Stack>

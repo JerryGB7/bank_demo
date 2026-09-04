@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {Alert, Box, Button, Paper, TextField, Typography} from '@mui/material'
 import { useAuth } from "../../context/AuthContext.jsx";
+import bankingBackground from "../../assets/banking-and-finance-concept-digital-connect-system-financial-and-banking-technology-with-integrated-circles-glowing-line-icons-and-on-blue-background-design-vector.png";
 
 function LoginForm(){
     const {login} = useAuth()
@@ -25,7 +26,16 @@ function LoginForm(){
     }
 
     return (
-        <Box sx={{display: 'flex', justifyContent: 'center', mt: 8}}>
+        <Box sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '100vh',
+            px: 2,
+            backgroundImage: `linear-gradient(rgba(7, 22, 42, 0.48), rgba(7, 22, 42, 0.48)), url(${bankingBackground})`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+        }}>
             <Paper component="form" onSubmit={handleSubmit} variant="outlined" sx={{p: 4, width: 320}}>
                 <Typography variant="h6" gutterBottom>
                     Meridian Bank Login
