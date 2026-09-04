@@ -2,4 +2,5 @@
 .env.*
 !.env.example
 !.env.*.example
-
+lambda-env.json
+__pycashe__

@@ -1,4 +1,3 @@
-
 {
     "Variables": {
         "DATABASE_URL": "postgresql+asyncpg://postgres:postgres@bankdemo-db.cxc0cqs26g9r.us-east-2.rds.amazonaws.com:5432/bankdemo",

@@ -21,3 +21,14 @@ class ServiceCallRead(ServiceCallBase):
     """Shape of an atm in any API Response"""
     id: int
     model_config = ConfigDict(from_attributes=True)
+
+
+class ReliabilityMetric(BaseModel):
+    """Resolved service-call outcomes grouped by ATM model."""
+
+    model: str
+    completed_count: int
+    failed_count: int
+    total_resolved: int
+    completion_ratio: float
+    failure_ratio: float
